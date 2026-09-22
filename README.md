@@ -69,13 +69,7 @@ Prices are modelled directly rather than logarithmically because electricity pri
 
 The seasonal component is represented by a two-harmonic regression:
 
-$$
-\mu(t) = a_0
-+ a_1\cos\!\left(\frac{2\pi t}{365}\right)
-+ b_1\sin\!\left(\frac{2\pi t}{365}\right)
-+ a_2\cos\!\left(\frac{4\pi t}{365}\right)
-+ b_2\sin\!\left(\frac{4\pi t}{365}\right).
-$$
+$$ \mu(t) = a_0 + a_1\cos\left(\frac{2\pi t}{365}\right) + b_1\sin\left(\frac{2\pi t}{365}\right) + a_2\cos\left(\frac{4\pi t}{365}\right) + b_2\sin\left(\frac{4\pi t}{365}\right). $$
 
 Here, $a_0$ is the baseline level, the first sine-cosine pair represents an annual cycle, and the second pair represents semiannual structure. The coefficients are estimated by ordinary least squares (OLS). Extra harmonics, weekday effects, or splines should be added only if clearly justified.
 
@@ -87,12 +81,7 @@ $$
 dY_t = -\kappa Y_t\,dt + \sigma\,dW_t.
 $$
 
-- $\kappa>0$ is the mean-reversion speed. Larger values imply a faster return toward the seasonal level. Its associated half-life is
-
-  $$
-  t_{1/2}=\frac{\ln 2}{\kappa}.
-  $$
-
+- $\kappa>0$ is the mean-reversion speed. Larger values imply a faster return toward the seasonal level. Its associated half-life is $t_{1/2} = log(2) / \kappa$.
 - $\sigma>0$ controls the magnitude of ordinary stochastic price variation.
 - $W_t$ is standard Brownian motion, representing many small unresolved influences on price.
 
@@ -121,7 +110,7 @@ $$
 Because
 
 $$
-\operatorname{Var}(\varepsilon)
+\text{Var}(\varepsilon)
 =\frac{\sigma^2}{2\kappa}\left(1-e^{-2\kappa\Delta}\right),
 $$
 
@@ -130,13 +119,13 @@ the diffusion volatility is estimated as
 $$
 \widehat{\sigma}
 =\sqrt{
-\widehat{\sigma}_{\varepsilon}^{,2}
+\widehat{\sigma}_{\varepsilon}^{2}
 \frac{2\widehat{\kappa}}
 {1-e^{-2\widehat{\kappa}\Delta}}
 }.
 $$
 
-The baseline convention is $\Delta=1$ day. Accordingly, $\kappa$ is measured in day$^{-1}$, $\lambda$ in spikes per day, and $\sigma$ in compatible daily-time units.
+The baseline convention is $\Delta=1$ day. Accordingly, $\kappa$ is measured in day $^{-1}$, $\lambda$ in spikes per day, and $\sigma$ in compatible daily-time units.
 
 ### Temporary compound-Poisson spike component
 
@@ -154,11 +143,7 @@ $$
 
 - $N_t$ is a Poisson process with intensity $\lambda$, the expected number of spike arrivals per unit time.
 - $\xi_i$ is the magnitude of jump $i$.
-- $\kappa_J>0$ is the spike-decay speed. Its half-life is
-
-  $$
-  t_{1/2,J}=\frac{\ln 2}{\kappa_J}.
-  $$
+- $\kappa_J>0$ is the spike-decay speed. Its half-life is $t_{1/2,J}=\frac{\ln 2}{\kappa_J}$.
 
 Economically, a jump represents an unusually large price movement that is not adequately described by ordinary Gaussian OU fluctuations. Its contribution then decays toward zero.
 
@@ -176,7 +161,7 @@ One alternative threshold may be used for a small sensitivity check. Extensive t
 If $n_J$ spike arrivals are detected during an observation period of length $T$, the homogeneous Poisson maximum-likelihood estimate is
 
 $$
-\widehat{\lambda}=\frac{n_J}{T}.
+\hat{\lambda}=\frac{n_J}{T}.
 $$
 
 #### Jump-size distribution
@@ -184,13 +169,13 @@ $$
 The baseline positive-spike model assumes
 
 $$
-\xi\sim\operatorname{Exp}(\beta),
+\xi\sim\text{Exp}(\beta),
 $$
 
 with maximum-likelihood estimate
 
 $$
-\widehat{\beta}=\frac{1}{\overline{\xi}}.
+\hat{\beta}=\frac{1}{\overline{\xi}}.
 $$
 
 Thus $1/\beta$ is the mean spike magnitude, and a larger $\beta$ implies smaller typical jumps. Comparing this fit with another simple positive distribution, such as a lognormal distribution, is optional and should only be attempted if time permits.
@@ -199,17 +184,17 @@ Thus $1/\beta$ is the mean spike magnitude, and a larger $\beta$ implies smaller
 
 The spike-decay parameter is estimated using one manageable, explainable method:
 
-1. **Post-spike AR(1):** if $Z_{t+\Delta}\approx\phi_JZ_t$, then
+1. **Post-spike AR(1):** if $Z_{t+\Delta}\approx\phi_J Z_t$, then 
 
-   $$
-   \widehat{\kappa}_J=-\frac{\log(\widehat{\phi}_J)}{\Delta}.
-   $$
+$$
+\hat{\kappa}_J = -\frac{\text{log}(\hat{\phi}_J)}{\Delta}.
+$$ 
 
 2. **Empirical half-life:** estimate the typical number of days $t_{1/2,J}$ for a spike effect to halve, then set
 
-   $$
-   \widehat{\kappa}_J=\frac{\ln 2}{t_{1/2,J}}.
-   $$
+ $$
+ \hat{\kappa}_J = \frac{\text{log}(2)}{t_{1/2,J}}.
+ $$
 
 A complicated latent-state procedure is intentionally avoided.
 
@@ -219,7 +204,7 @@ A complicated latent-state procedure is intentionally avoided.
 2. Aggregate observations to daily average EUR/MWh.
 3. Inspect the complete time series and empirical distribution.
 4. Estimate $\mu(t)$ by harmonic regression.
-5. Compute $X_t=S_t-\widehat{\mu}(t)$.
+5. Compute $X_t=S_t-\hat{\mu}(t)$.
 6. Fit a preliminary AR(1)/OU model.
 7. Detect candidate spikes from the residuals using the chosen rule.
 8. Re-estimate $\kappa$ and $\sigma$ from observations representing ordinary dynamics.
@@ -265,7 +250,7 @@ Validation includes:
 - **Visual behaviour:** empirical prices, representative simulated paths, empirical and simulated distributions or ECDFs, and seasonal average patterns.
 - **Summary statistics:** mean, variance or standard deviation, selected quantiles such as 5%, 50%, 95%, and 99%, extreme upper-tail behaviour, and detected-spike frequency.
 - **Dependence:** short- and medium-lag autocorrelation functions and mean-reversion behaviour.
-- **Seasonality:** broad annual and semiannual patterns generated by $\widehat{\mu}(t)$.
+- **Seasonality:** broad annual and semiannual patterns generated by $\hat{\mu}(t)$.
 - **Spikes:** frequency, magnitude distribution, and approximate duration or decay.
 
 The preferred implementation simulates many paths with the same length as the historical sample, calculates each statistic for every path, and compares the observed statistic with its simulated distribution. Model mismatches are valid findings and should be discussed rather than hidden by adding unnecessary complexity.
