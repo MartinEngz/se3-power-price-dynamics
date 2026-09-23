@@ -1,0 +1,13 @@
+# Python cache / compiled files
+__pycache__/
+*.py[cod]
+
+# macOS
+.DS_Store
+
+# ENTSO-E data (available in drive folder)
+entso_se3/
+
+# Generated data / results
+outputs/
+
