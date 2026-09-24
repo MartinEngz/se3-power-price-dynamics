@@ -1,9 +1,9 @@
 # Toy parameters for testing the simulation pipeline.
 # These are not fitted to SE3 data.
 
-TOY_SE3_MODEL = {
+STYLIZED_SE3_MODEL = {
     # Simulation
-    "N": 500,
+    "N": 5,
     "T": 1.0,              # years
     "M": 365,              # daily steps
     "Y0": 0.0,

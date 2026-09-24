@@ -1,7 +1,7 @@
 import numpy as np
 
 from experiments.config import (
-    TOY_SE3_MODEL,
+    STYLIZED_SE3_MODEL,
     PRELIMINARY_SE3_MODEL,
 )
 
@@ -26,12 +26,12 @@ from src.plotting import (
 def run_fitted_model_simulation():
     """
     Test the electricity-price simulation and validation pipeline
-    using toy parameters.
+    using stylized parameters.
 
     The parameters used here are not fitted to SE3 data.
     """
-    # cfg = TOY_SE3_MODEL
-    cfg = PRELIMINARY_SE3_MODEL
+    cfg = STYLIZED_SE3_MODEL
+    # cfg = PRELIMINARY_SE3_MODEL
 
     rng = np.random.default_rng(
         cfg["random_seed"]
@@ -80,7 +80,7 @@ def run_fitted_model_simulation():
 
     # --- Simple diagnostics
 
-    print("\n--- Toy fitted-model simulation ---")
+    print("\n--- Stylized fitted-model simulation ---")
     print(f"Number of paths: {cfg['N']:,}")
     print(f"Time steps:      {cfg['M']:,}")
     print(f"Horizon:         {cfg['T']:.2f} years")
@@ -109,7 +109,7 @@ def run_fitted_model_simulation():
         S_paths=S_paths,
         T=cfg["T"],
         max_paths=20,
-        title="Toy Seasonal Mean-Reverting Jump Model",
+        title="Seasonal Mean-Reverting Jump Model -- Stylized Parameters",
     )
 
     plot_price_distribution(
