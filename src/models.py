@@ -186,7 +186,7 @@ def simulate_mean_reverting_jump_price_paths(
         mask = jump_counts > 0
 
         # Sum of n Exp(scale) variables is Gamma(n, scale)
-        jump_increments[mask] = rng.gamma(shape=jump_counts[mask], scale=jump_intensity)
+        jump_increments[mask] = rng.gamma(shape=jump_counts[mask], scale=jump_scale)
 
     # --- State variables
     Y_paths = np.empty((N, M+1))
@@ -198,18 +198,24 @@ def simulate_mean_reverting_jump_price_paths(
     S_paths = np.empty((N, M+1))
     S_paths[:, 0] = seasonal_mean(0.0) + Y0 + Z0
 
-    # --- Exact transition coefficients (using analytical solution of OU SDE derived by Ito product rule)
+    # --- Exact Ohrnstein-Uhlenbeck transition coefficients (using analytical solution of OU SDE derived by Ito product rule)
     ou_decay = np.exp(-kappa * dt)
     ou_std = sigma * np.sqrt( (1 - np.exp(-2 * kappa * dt)) / (2 * kappa))
 
+    # --- jump/spike decay factor
     jump_decay = np.exp(-jump_reversion * dt)
 
     # --- simulation
     for m in range(M):
         t_next = (m+1) * dt
 
-        Y_paths[:, m+1] = ou_decay * Z_paths[:, m] + jump_increments[:, m]
+        # Update Y_paths (mean-reverting model component)
+        Y_paths[:, m+1] = ou_decay * Z_paths[:, m] + ou_std * normal_draws[:,m] 
 
+        # Update Z_paths (temporary spike component)
+        Z_paths[:, m+1] = jump_decay * Z_paths[:, m] + jump_increments[:, m]
+
+        # Observed electricity price
         S_paths[:, m+1] = seasonal_mean(t_next) + Y_paths[:, m+1] + Z_paths[:, m+1]
 
     return S_paths
