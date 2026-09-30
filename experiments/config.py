@@ -29,17 +29,13 @@ STYLIZED_SE3_MODEL = {
 }
 
 
-# Current preliminary SE3 parameter estimates.
-#
-# Seasonality and OU parameters are taken from the current
-# estimation pipeline. Jump-process parameters are temporary
-# toy values until the jump estimation has been inspected.
-
-PRELIMINARY_SE3_MODEL = {
+# Preliminary estimates from the current full-sample estimation pipeline.
+# jump_reversion is still a placeholder and has not yet been estimated.
+ESTIMATED_SE3_MODEL = {
     # Simulation
-    "N": 500,
-    "T": 1.0,              # years
-    "M": 365,              # daily time steps
+    "N": 3,
+    "T": 1.0,                  # years
+    "M": 365,                  # daily time steps
     "Y0": 0.0,
     "Z0": 0.0,
 
@@ -52,13 +48,17 @@ PRELIMINARY_SE3_MODEL = {
 
     # Estimated OU component
     "phi": 0.8430,
-    "kappa": 62.35,        # 1/year
-    "sigma": 536.76,       # EUR/MWh / sqrt(year)
+    "kappa": 62.35,            # 1/year
+    "sigma": 536.76,           # EUR/MWh / sqrt(year)
 
-    # Temporary toy jump parameters
-    "jump_intensity": 7.0,  # jumps/year
-    "jump_scale": 40.0,     # EUR/MWh
-    "jump_reversion": 80.0, # 1/year
+    # Estimated positive-spike process
+    "spike_threshold": 144.2334,   # EUR/MWh
+    "n_spikes": 85,
+    "jump_intensity": 7.2539,      # jumps/year
+    "jump_scale": 241.1772,        # mean detected spike magnitude, EUR/MWh
+
+    # Not yet estimated
+    "jump_reversion": 80.0,        # 1/year, temporary placeholder
 
     "random_seed": 123,
 }
