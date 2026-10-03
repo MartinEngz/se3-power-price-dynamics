@@ -210,7 +210,7 @@ def simulate_mean_reverting_jump_price_paths(
         t_next = (m+1) * dt
 
         # Update Y_paths (mean-reverting model component)
-        Y_paths[:, m+1] = ou_decay * Z_paths[:, m] + ou_std * normal_draws[:,m] 
+        Y_paths[:, m+1] = ou_decay * Y_paths[:, m] + ou_std * normal_draws[:,m] 
 
         # Update Z_paths (temporary spike component)
         Z_paths[:, m+1] = jump_decay * Z_paths[:, m] + jump_increments[:, m]

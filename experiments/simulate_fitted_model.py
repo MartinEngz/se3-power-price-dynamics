@@ -30,8 +30,8 @@ def run_fitted_model_simulation():
 
     The parameters used here are not fitted to SE3 data.
     """
-    cfg = STYLIZED_SE3_MODEL
-    # cfg = ESTIMATED_SE3_MODEL
+    # cfg = STYLIZED_SE3_MODEL
+    cfg = ESTIMATED_SE3_MODEL
 
     rng = np.random.default_rng(
         cfg["random_seed"]
@@ -109,7 +109,7 @@ def run_fitted_model_simulation():
         S_paths=S_paths,
         T=cfg["T"],
         max_paths=20,
-        title="Seasonal Mean-Reverting Jump Model -- Estimated Parameters",
+        title="Seasonal Mean-Reverting Jump Diffusion Price Model -- Estimated Parameters",
     )
 
     plot_price_distribution(

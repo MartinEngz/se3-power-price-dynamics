@@ -57,8 +57,8 @@ ESTIMATED_SE3_MODEL = {
     "jump_intensity": 7.2539,      # jumps/year
     "jump_scale": 241.1772,        # mean detected spike magnitude, EUR/MWh
 
-    # Not yet estimated
-    "jump_reversion": 80.0,        # 1/year, temporary placeholder
+    # Not yet estimated, we use the same kappa as for OU component 
+    "jump_reversion": 62.35,        # 1/year, temporary placeholder
 
     "random_seed": 123,
 }
