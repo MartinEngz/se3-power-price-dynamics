@@ -15,6 +15,7 @@ def load_and_clean_data(path_pattern="entso_se3/*EnergyPrices*.csv"):
   #dagsmedelvärden
   combined = pd.concat(dfs, ignore_index=True)
   combined["DateTime(UTC)"] = pd.to_datetime(combined["DateTime(UTC)"])
+  combined = combined[combined["DateTime(UTC)"] >= "2023-01-01" ]
   combined["Date"] = combined["DateTime(UTC)"].dt.date
   combined["EUR/MWh"] = pd.to_numeric(combined["EUR/MWh"], errors="coerce")
 

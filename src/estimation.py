@@ -50,4 +50,18 @@ def run_seasonality_and_ou(daily_avg):
   print(f"Tröskelvärde: +/- {threshold:.2f} EUR/MWh")
   print(f"{len(spikes)} spikar")
 
+  #kappa_J (AR(1) på dagarna efter varje spik)
+  n_after = 3
+  spike_pos = np.where(np.abs(X_t_series) > threshold)[0]
+  x_now, x_next = [], []
+  for i in spike_pos:
+    for k in range(n_after):
+      if i + k + 1 < len(X_t_series):
+        x_now.append(X_t_series[i + k])
+        x_next.append(X_t_series[i + k + 1])
+  phi_J = sm.OLS(np.array(x_next), np.array(x_now)).fit().params[0]
+  kappa_J = -np.log(phi_J) / delta_t if phi_J > 0 else np.nan
+  print(f"Phi_J: {phi_J:.4f}")
+  print(f"Kappa_J: {kappa_J:.2f}")
+
   return daily_avg, spikes
