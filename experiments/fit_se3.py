@@ -9,5 +9,5 @@ if __name__ == "__main__":
   daily_avg, spikes = run_seasonality_and_ou(daily_avg)
 
   #sparar resultatet
-  daily_avg.to_csv("SE3_deseasonalized_output.csv", index=False)
+  daily_avg.to_csv("outputs/SE3_deseasonalized_output.csv", index=False)
   print("\n Resultatet sparat i 'SE3_deseasonalized_output.csv'.")
