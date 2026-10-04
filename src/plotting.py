@@ -234,3 +234,134 @@ def plot_historical_year(
         plt.show()
 
     return fig, ax
+
+def simulated_daily_values(S_paths, n_days):
+    """
+    Remove the simulated value at time zero and return on value
+    for each historical day.
+    """
+    paths = np.asarray(S_paths, dtype=float)
+
+    if paths.ndim != 2:
+        raise ValueError("S_paths must have shape (N, M + 1)")
+
+    if paths.shape[1] < n_days + 1:
+        raise ValueError(
+            f"Need at least {n_days + 1} simulated values, "
+            f"including time zero; reveived {paths.shape[1]}."
+        )
+
+    return paths[:, 1:n_days + 1]
+
+def plot_historical_vs_simulated_year(
+        data,
+        S_paths,
+        year,
+        max_paths=3,
+        date_column="Date",
+        price_column="EUR/MWh",
+        save_path=None,
+        show=True,
+):
+    """Plot one historical year together with simulated paths."""
+    yearly = historical_year_data(
+        data,
+        year,
+        date_column=date_column,
+        price_column=price_column,
+    )
+
+    simulated = simulated_daily_values(
+        S_paths,
+        n_days=len(yearly)
+    )
+
+    n_plot = min(max_paths, simulated.shape[0])
+
+    fig, ax = plt.subplots(figsize=(10,5))
+
+    ax.plot(
+        yearly[date_column],
+        yearly[price_column],
+        color="black",
+        linewidth=1.5,
+        label=f"Historical SE3 ({year})",
+        zorder=3,
+    )
+
+    for i in range(n_plot):
+        ax.plot(
+            yearly[date_column],
+            simulated[i],
+            linewidth=0.9,
+            alpha=0.65,
+            label="Simulated path" if i==0 else None,
+        )
+
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Price (EUR/MWh)")
+    ax.set_title("Historical and Simulated SE3 Price Paths")
+    ax.grid(True, linestyle=":", linewidth=0.8)
+    ax.legend()
+
+    fig.autofmt_xdate()
+    fig.tight_layout()
+
+    if save_path is not None:
+        fig.savefig(save_path, dpi=300, bbox_inches="tight")
+
+    if show:
+        plt.show()
+
+    return fig, ax
+
+def plot_historical_vs_simulated_distribution(
+        historical_values,
+        S_paths,
+        bins=60,
+        save_path=None,
+        show=True,
+):
+    """Compare historical and pooled simulated price distributions."""
+    historical = np.asarray(historical_values, dtype=float)
+    historical = historical[np.isfinite(historical)]
+
+    # Exclude the shared initial value at time zero.
+    simulated = np.asarray(S_paths, dtype=float)[:, 1:].ravel()
+    simulated = simulated[np.isfinite(simulated)]
+
+    fig, ax = plt.subplots(figsize=(8.5, 4.8))
+
+    ax.hist(
+        simulated,
+        bins=bins,
+        density=True,
+        alpha=0.45,
+        label="Simulated",
+    )
+
+    ax.hist(
+        historical,
+        bins=bins,
+        density=True,
+        histtype="step",
+        linewidth=1.8,
+        color="black",
+        label="Historical",
+    )
+
+    ax.set_xlabel("Price (EUR/MWh)")
+    ax.set_ylabel("Density")
+    ax.set_title("Historical and Simulated Price Distributions")
+    ax.grid(True, linestyle=":", linewidth=0.8)
+    ax.legend()
+    fig.tight_layout()
+
+    if save_path is not None:
+        fig.savefig(save_path, dpi=300, bbox_inches="tight")
+
+    if show:
+        plt.show()
+
+    return fig, ax
+
