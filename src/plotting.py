@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 
 
@@ -163,3 +164,73 @@ def plot_statistic_distribution(
     )
     plt.tight_layout()
     plt.show()
+
+def historical_year_data(
+        data,
+        year,
+        date_column="Date",
+        price_column="EUR/MWh",
+):
+    """Select and clean one calendar year of historical prices."""
+    dates = pd.to_datetime(data[date_column], errors="coerce")
+    prices = pd.to_numeric(data[price_column], errors="coerce")
+
+    yearly = pd.DataFrame({
+        date_column: dates,
+        price_column: prices
+    })
+
+    yearly = yearly.loc[dates.dt.year == int(year)]
+    yearly = yearly.dropna()
+    yearly = yearly.sort_values(date_column).reset_index(drop=True)
+
+    if yearly.empty:
+        available = sorted(dates.dropna().dt.year.unique())
+        raise ValueError(
+            f"No observations found for {year}. "
+            f"Available years: {available}"
+        )
+
+    return yearly
+
+def plot_historical_year(
+    data,
+    year,
+    date_column="Date",
+    price_column="EUR/MWh",
+    save_path=None,
+    show=True,
+):
+    """Plot historical daily-average SE3 prices for one year."""
+    yearly = historical_year_data(
+        data,
+        year,
+        date_column=date_column,
+        price_column=price_column
+    )
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    ax.plot(
+        yearly[date_column],
+        yearly[price_column],
+        color="black",
+        linewidth=1.1,
+        label="Historical SE3 prices",
+    )
+
+    ax.set_xlabel("Date")
+    ax.set_ylabel("Price (EUR/MWh)")
+    ax.set_title(f"Historical SE3 Day-Ahead Prices, {year}")
+    ax.grid(True, linestyle=":", linewidth=0.8)
+    ax.legend()
+
+    fig.autofmt_xdate()
+    fig.tight_layout()
+
+    if save_path is not None:
+        fig.savefig(save_path, dpi=300, bbox_inches="tight")
+
+    if show:
+        plt.show()
+
+    return fig, ax
