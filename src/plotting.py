@@ -319,10 +319,12 @@ def plot_historical_vs_simulated_distribution(
         historical_values,
         S_paths,
         bins=60,
+        plot_range=(-100, 250),
         save_path=None,
         show=True,
 ):
     """Compare historical and pooled simulated price distributions."""
+
     historical = np.asarray(historical_values, dtype=float)
     historical = historical[np.isfinite(historical)]
 
@@ -330,19 +332,27 @@ def plot_historical_vs_simulated_distribution(
     simulated = np.asarray(S_paths, dtype=float)[:, 1:].ravel()
     simulated = simulated[np.isfinite(simulated)]
 
+    lower, upper = plot_range
+    bin_edges = np.linspace(lower, upper, bins + 1)
+
+    simulated_outside = np.mean(
+        (simulated < lower) | (simulated > upper)
+    )
+
     fig, ax = plt.subplots(figsize=(8.5, 4.8))
 
     ax.hist(
         simulated,
-        bins=bins,
+        bins=bin_edges,
         density=True,
         alpha=0.45,
+        color="tab:blue",
         label="Simulated",
     )
 
     ax.hist(
         historical,
-        bins=bins,
+        bins=bin_edges,
         density=True,
         histtype="step",
         linewidth=1.8,
@@ -350,11 +360,26 @@ def plot_historical_vs_simulated_distribution(
         label="Historical",
     )
 
+    ax.set_xlim(lower, upper)
     ax.set_xlabel("Price (EUR/MWh)")
     ax.set_ylabel("Density")
     ax.set_title("Historical and Simulated Price Distributions")
     ax.grid(True, linestyle=":", linewidth=0.8)
     ax.legend()
+
+    ax.text(
+        0.98, 
+        0.8, 
+        (
+            f"Simulated values outside displayed range: "
+            f"{100 * simulated_outside:.2f}%"
+        ),
+        transform=ax.transAxes,
+        ha="right",
+        va="top",
+        fontsize=9,
+    )
+
     fig.tight_layout()
 
     if save_path is not None:
