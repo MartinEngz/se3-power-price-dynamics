@@ -40,22 +40,22 @@ ESTIMATED_SE3_MODEL = {
     "Z0": 0.0,
 
     # Estimated harmonic seasonality, EUR/MWh
-    "a0": 48.4350,
-    "a1": 9.7719,
-    "b1": -4.4011,
-    "a2": 3.1526,
-    "b2": 1.1118,
+    "a0": 49.6667,
+    "a1": 17.7604,
+    "b1": 7.7254,
+    "a2": 4.6718,
+    "b2": 1.3214,
 
     # Estimated OU component
-    "phi": 0.8430,
-    "kappa": 62.35,            # 1/year
-    "sigma": 536.76,           # EUR/MWh / sqrt(year)
+    "phi": 0.6881,
+    "kappa": 136.43,            # OU reversion speed [1/year]
+    "sigma": 560.50,           # EUR/MWh / sqrt(year)
 
     # Estimated positive-spike process
-    "spike_threshold": 144.2334,   # EUR/MWh
-    "n_spikes": 85,
-    "jump_intensity": 7.2539,      # jumps/year
-    "jump_scale": 241.1772,        # mean detected spike magnitude, EUR/MWh
+    "spike_threshold": 101.96,   # EUR/MWh
+    "n_spikes": 10,
+    "jump_intensity": 2.6937,      # jumps/year
+    "jump_scale": 121.4195,        # mean detected spike magnitude, EUR/MWh
     "jump_reversion": 212.45,       # kappa_J
     "random_seed": 123,
 }
