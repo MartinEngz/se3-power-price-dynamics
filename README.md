@@ -68,7 +68,7 @@ The jump process is compound Poisson with exponentially distributed positive jum
 | $$b_2$$ | 1.32 EUR/MWh |
 | $$\phi$$ | 0.6881 |
 | $$\kappa$$ | 136.43/year |
-| $$\sigma$$ | 560.50 EUR/MWh/year^(-1/2) |
+| $$\sigma$$ | 560.50 EUR/MWh/year^(1/2) |
 | $$\phi_J$$ | 0.5587 |
 | $$\kappa_J$$ | 212.45/year |
 | Detected spikes | 10 |
