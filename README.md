@@ -49,18 +49,12 @@ The jump process is compound Poisson with exponentially distributed positive jum
 - Ordinary dynamics: **AR(1)** on deseasonalized prices
 - Spike detection: residuals exceeding **3 residual standard deviations**
 - Mean reversion:
-  $$
-  \hat{\kappa}=-\frac{\log \hat{\phi}}{\Delta}
-  $$
+  $$\hat{\kappa}=-\frac{\log \hat{\phi}}{\Delta}$$
 - OU volatility: recovered from the exact OU transition variance
 - Jump intensity:
-  $$
-  \hat{\lambda}=\frac{n_J}{T}
-  $$
+  $$\hat{\lambda}=\frac{n_J}{T}$$
 - Jump sizes: exponential MLE,
-  $$
-  \hat{\beta}=\frac{1}{\bar{\xi}}
-  $$
+  $$\hat{\beta}=\frac{1}{\bar{\xi}}$$
 - Spike decay: post-spike AR(1)
 
 ## Estimated parameters
@@ -73,10 +67,10 @@ The jump process is compound Poisson with exponentially distributed positive jum
 | $$a_2$$ | 4.67 EUR/MWh |
 | $$b_2$$ | 1.32 EUR/MWh |
 | $$\phi$$ | 0.6881 |
-| $$\kappa$$ | 136.43 year$$^{-1}$$ |
-| $$\sigma$$ | 560.50 EUR/MWh/$$\sqrt{\text{year}}$$ |
+| $$\kappa$$ | 136.43/year |
+| $$\sigma$$ | 560.50 EUR/MWh/year^(-1/2) |
 | $$\phi_J$$ | 0.5587 |
-| $$\kappa_J$$ | 212.45 year$$^{-1}$$ |
+| $$\kappa_J$$ | 212.45/year |
 | Detected spikes | 10 |
 | $$\lambda$$ | 2.69 spikes/year |
 | Mean jump size | 121.42 EUR/MWh |
@@ -86,7 +80,7 @@ The jump process is compound Poisson with exponentially distributed positive jum
 The OU component is simulated using its **exact conditional transition**. Jump counts are Poisson and summed exponential jumps are sampled through the equivalent Gamma distribution.
 
 <p align="center">
-  <img src="figures/historical_simulated_paths.png" width="800">
+  <img src="figures/validation/historical_vs_simulated_2025.png" width="600">
 </p>
 
 <p align="center">
@@ -102,7 +96,7 @@ Against 2025 SE3 prices, the model reproduced the upper tail reasonably well:
 
 
 <p align="center">
-  <img src="figures/historical_simulated_distributions.png" width="800">
+  <img src="figures/validation/historical_vs_simulated_distribution_2025.png" width="600">
 </p>
 
 <p align="center">
